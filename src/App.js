@@ -1,6 +1,5 @@
 import './App.css';
-import DoctorTable from './DoctorTable';
-
+import DoctorTable from './components/DoctorTable';
 function App() {
   return (
     <div className="App">
