@@ -1,27 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import EditDoctorForm from './EditDoctorForm';
 import AddDoctorForm from './AddDoctorForm';
+import './DoctorTable.css'
 
 const baseUrl = 'https://localhost:7105/Doctor';
 
-const createUrlWithParams = () =>{
+const createUrlWithParams = (currentPage, pageSize, sortField, sortDirection, searchQuery) => {
   const url = new URL(baseUrl);
-  url.searchParams.append('IsDescending', false);
-  url.searchParams.append('PageNumber', 1);
-  url.searchParams.append('PageSize', 5);
-  url.searchParams.append('SortParameter', 'LastName');
-  url.searchParams.append('SortParameter', 'CareerStartYear');
+  url.searchParams.append('IsDescending', sortDirection === 'desc');
+  url.searchParams.append('PageNumber', currentPage);
+  url.searchParams.append('PageSize', pageSize);
+  url.searchParams.append('SortParameter', sortField);
+  if (searchQuery) {
+    url.searchParams.append('SearchValue', searchQuery);
+  }
   return url;
-}
+};
 
 function DoctorTable() {
   const [doctors, setDoctors] = useState([]); 
   const [editingDoctor, setEditingDoctor] = useState(null);
   const [addingDoctor, setAddingDoctor] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [sortField, setSortField] = useState('LastName');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
-      const url = createUrlWithParams(); 
+      const url = createUrlWithParams(currentPage, pageSize, sortField, sortDirection, searchQuery); 
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -34,7 +42,7 @@ function DoctorTable() {
     };
 
     fetchData();
-  }, []);
+  }, [currentPage, pageSize, sortField, sortDirection, searchQuery]);
 
   if (!doctors) {
     return <div>Loading...</div>;
@@ -45,7 +53,7 @@ function DoctorTable() {
   };
   
   const handleAddComplete = async () => {
-    const url = createUrlWithParams();
+    const url = createUrlWithParams(currentPage, pageSize, sortField, sortDirection, searchQuery);
     const response = await fetch(url);
     const data = await response.json();
     setDoctors(data.results);
@@ -57,7 +65,7 @@ function DoctorTable() {
   };
 
   const handleUpdate = async () => {
-    const url = createUrlWithParams();    
+    const url = createUrlWithParams(currentPage, pageSize, sortField, sortDirection, searchQuery);    
     const response = await fetch(url);
     const data = await response.json();
     setDoctors(data.results);
@@ -77,6 +85,34 @@ function DoctorTable() {
 
   return (
     <div>
+       <div>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="sortField">Сортировать по:</label>
+        <select
+          id="sortField"
+          value={sortField}
+          onChange={(e) => setSortField(e.target.value)}
+        >
+          <option value="FirstName">Имя</option>
+          <option value="LastName">Фамилия</option>
+          <option value="MiddleName">Отчество</option>
+          <option value="DateOfBirth">Дата Рождения</option>
+          <option value="Email">Почта</option>
+          <option value="Specialization">Специализация</option>
+          <option value="Office">Офис</option>
+          <option value="CareerStartYear">Год</option>          
+        </select>
+        <button onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}>
+          {sortDirection === 'asc' ? 'Ascending' : 'Descending'}
+        </button>
+      </div>
     <table>
       <thead>
         <tr>
@@ -111,7 +147,7 @@ function DoctorTable() {
           </tr>
         ))}
       </tbody>
-    </table>  
+    </table>
     {editingDoctor && (
         <EditDoctorForm
           doctor={editingDoctor}
@@ -120,7 +156,7 @@ function DoctorTable() {
           url={baseUrl}
         />
     )}    
-    <button onClick={handleAdd}>Добавить</button>
+    <button onClick={handleAdd}>Добавить доктора</button>
     {addingDoctor && (
         <AddDoctorForm 
           onClose={() => setAddingDoctor(false)} 
@@ -128,6 +164,23 @@ function DoctorTable() {
           url = {baseUrl}
           />
       )}
+      <div>
+        <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+          Previous
+        </button>
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === Math.ceil(doctors.totalCount / pageSize)}
+        >
+          Next
+        </button>      
+        <label>Размер страницы</label>
+        <input
+          type="number"          
+          value={pageSize}
+          onChange={(e) => setPageSize(e.target.value)}
+        />
+      </div>
     </div>
   );
 }
