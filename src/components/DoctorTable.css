@@ -3,9 +3,9 @@ table {
     border-collapse: collapse;
     margin-bottom: 20px;
   } 
-  th,
+th,
 td {
- font-size: 15px;
+  font-size: 15px;
   padding: 8px;
   text-align: left;
 }
@@ -19,8 +19,7 @@ th {
     border: none;
     color: white;
     padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
+    text-align: center;    
     display: inline-block;
     font-size: 14px;
     margin: 4px 2px;
@@ -44,17 +43,5 @@ th {
   label {
     display: block;
     margin-top: 10px;
-    font-size: small;
-  }
-  
-  .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
+    font-size: 15px;
+  }  
