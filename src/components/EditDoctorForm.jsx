@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 
 function EditDoctorForm({ doctor, onClose, onUpdate, url }) {
   const [firstName, setFirstName] = useState(doctor.firstName);
-      const [lastName, setLastName] = useState(doctor.lastName);
-      const [middleName, setMiddleName] = useState(doctor.middleName);
-      const [dateOfBirth, setDateOfBirth] = useState(doctor.dateOfBirth);
-      const [email, setEmail] = useState(doctor.email);
-      const [specialization, setSpecialization] = useState(doctor.specialization);
-      const [office, setOffice] = useState(doctor.office);
-      const [careerStartYear, setCareerStartYear] = useState(doctor.careerStartYear);
-      const [status, setStatus] = useState(doctor.status);
+  const [lastName, setLastName] = useState(doctor.lastName);
+  const [middleName, setMiddleName] = useState(doctor.middleName);
+  const [dateOfBirth, setDateOfBirth] = useState(doctor.dateOfBirth);
+  const [email, setEmail] = useState(doctor.email);
+  const [specialization, setSpecialization] = useState(doctor.specialization);
+  const [office, setOffice] = useState(doctor.office);
+  const [careerStartYear, setCareerStartYear] = useState(doctor.careerStartYear);
+  const [status, setStatus] = useState(doctor.status);
 
   const handleSave = async () => {
     try {
@@ -45,7 +45,7 @@ function EditDoctorForm({ doctor, onClose, onUpdate, url }) {
 
   return (
     <div>
-      <h2>Редактировать доктора</h2>
+      <h4>Редактировать доктора</h4>
       <label>
         Имя:
         <input
