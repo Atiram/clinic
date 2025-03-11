@@ -110,7 +110,7 @@ function DoctorTable() {
           <option value="CareerStartYear">Год</option>          
         </select>
         <button onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}>
-          {sortDirection === 'asc' ? 'Ascending' : 'Descending'}
+          {sortDirection === 'asc' ? 'По возрастанию' : 'По убыванию'}
         </button>
       </div>
     <table>
@@ -166,13 +166,13 @@ function DoctorTable() {
       )}
       <div>
         <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
-          Previous
+          Назад
         </button>
         <button
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage === Math.ceil(doctors.totalCount / pageSize)}
         >
-          Next
+          Вперед
         </button>      
         <label>Размер страницы</label>
         <input
